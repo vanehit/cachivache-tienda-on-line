@@ -1,0 +1,16 @@
+[
+    {
+	
+	 "products": [
+
+            { 
+                "id": 1, 
+                "name": "Duendes", 
+                "price": 2500, 
+                "thumbnail":"../cachivache-Tienda-on-line/frontend/images/product-1.jpeg", 
+                "stock": 20
+            }
+
+        ]
+    }
+]
