@@ -1,5 +1,5 @@
 const express = require('express')
-const Contenedor = require('../contenedor')
+const Contenedor = require('../contenedores/contenedorFile')
 const { Router } = express
 const fs = require( 'fs' );
 

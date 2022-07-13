@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-class Contenedor {
+class contenedorFile {
     constructor(filename) {
         console.log('Init Contenedor')
         this.filename = filename
@@ -54,6 +54,14 @@ class Contenedor {
         return this.data.find(p => p.id == id)
     }
 
+    editByID(obj, id) {
+        obj [ 'id' ] = id
+        const idx = this.getAll().findIndex(p => p.id == id)
+        this.data.splice(idx, 1, obj)
+
+        return obj
+    }
+
     getAll() {
         return this.data
     }
@@ -75,4 +83,4 @@ class Contenedor {
 
 
 
-module.exports = Contenedor
+module.exports = contenedorFile

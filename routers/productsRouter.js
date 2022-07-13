@@ -2,9 +2,9 @@ const express = require('express')
 const { Router } = express
 const fs = require( 'fs' );
 
-const Contenedor = require('../contenedor');
+const contenedorFile = require('../contenedores/contenedorFile');
 
-const contenedor = new Contenedor('products.json');
+const contenedor = new contenedorFile('products.json');
 
 const productsRouter = Router()
 
