@@ -3,8 +3,8 @@ const CarritoModel = require('../../model/carrito.model')
 
 class carritoMongoDAO  extends contenedorMongo {
     constructor () {
-        super('mongodb://localhost/products', ProductModel)
+        super('mongodb://localhost/products', CarritoModel)
     }
 }
 
-module.exports = carritoMongoDAO
+module.exports = carritoMongoDAO;

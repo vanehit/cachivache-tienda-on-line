@@ -1,6 +1,6 @@
-const contenedorMemoria = require('../../contenedores/contenedorMemory')
+const contenedorMemory = require('../../contenedores/contenedorMemory')
 
-class carritoMemoryDAO  extends contenedorMemoria {
+class carritoMemoryDAO  extends contenedorMemory {
     constructor () {
         super()
     }

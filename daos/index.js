@@ -9,31 +9,30 @@ const productMongoDAO = require ('./products/productMongoDAO')
 
 const FactoryDAO = () => {
 
-    const typeDB = process.env.typeDB
-
+    const typeDB = process.env.typeDB;
+  
     if (typeDB == 'memory') {
-        console.log('Generate DAO with memory');
-
-        return {
-            carrito: new carritoMemoryDAO(),
-            product: new productMemoryDAO()
-        }
-    } else if (typeDB == 'file'){
-        console.log('Generate DAO with file');
-        return {
-            carrito: new carritoFileDAO(),
-            product: new productFileDAO()
-        }
-    }  else if (typeDB == 'mongo'){
-        console.log('Generate DAO with mongo');
-        return {
-            carrito: new carritoMongoDAO(),
-            product: new productMongoDAO()
-        }
+      console.log('Generate DAO with memory');
+      return {
+        carrito: new carritoMemoryDAO(),
+        products: new  productMemoryDAO()
+      }
+    } else if (typeDB == 'file') {
+      console.log('Generate DAO with file');
+      return {
+        carrito: new carritoFileDAO(),
+        products: new productFileDAO()
+      }
+    } else if (typeDB == 'mongo') {
+      console.log('Generate DAO with mongo');
+      return {
+        carrito: new carritoMongoDAO(),
+        products: new productMongoDAO()
+      }
     }
-    
-    throw new Error ('typeDB is not found')
-
-}
-
-module.exports = FactoryDAO
+  
+    throw new Error('typeDB is not found');
+  }
+  
+  module.exports = FactoryDAO;
+  
