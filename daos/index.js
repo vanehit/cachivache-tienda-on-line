@@ -31,7 +31,7 @@ const FactoryDAO = () => {
       }
     }
   
-    throw new Error('typeDB is not found');
+    
   }
   
   module.exports = FactoryDAO;

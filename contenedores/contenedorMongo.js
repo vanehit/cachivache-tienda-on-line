@@ -48,7 +48,21 @@ class contenedorMongo{
 
         return true
     }
-
+    async addToCarrito(id, obj){
+        const objUpdated = await this.model.updateOne(
+          { _id: new ObjectId(id) },
+          { $addToSet: {productos : obj} }
+        );
+        return objUpdated;
+      }
+    
+      async delFromCarrrito( id, idProd ){
+        const objUpdated = await this.model.updateOne(
+          { _id: new ObjectId(id) },
+          { $pull: {productos : { id: Number(idProd) }} }
+        );
+        return objUpdated;
+      }
    
 }
 

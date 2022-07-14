@@ -56,7 +56,7 @@ productsRouter.put( '/:id', ( req, res ) => {
 //5) Elimina un producto segun su id: (disponible para admins)
 productsRouter.delete( '/:id', ( req, res ) => {
   if( req.headers.admin ){
-    DAO.product.deleteById( req.params.id ).then( data => res.json( data ) )
+    DAO.products.deleteById( req.params.id ).then( data => res.json( data ) )
   }
   else{
     res.json({
