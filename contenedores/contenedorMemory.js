@@ -1,12 +1,13 @@
 const fs = require('fs')
 
 class contenedorMemory {
+    
     constructor() {
         this.data = []
 
     }
 
-    save(obj) {
+    async save(obj) {
         const id = this.getLastID()
         this.data.push({
             ...obj, ...{ id: id + 1 }
@@ -14,11 +15,11 @@ class contenedorMemory {
         this.write()
     }
 
-    getByID(id) {
+    async getByID(id) {
         return this.data.find(p => p.id == id)
     }
 
-    editByID(obj, id) {
+    async editByID(obj, id) {
         obj [ 'id' ] = id
         const idx = this.getAll().findIndex(p => p.id == id)
         this.data.splice(idx, 1, obj)
@@ -26,18 +27,18 @@ class contenedorMemory {
         return obj
     }
 
-    getAll() {
+    async getAll() {
         return this.data
     }
 
-    deleteById(id) {
+    async deleteById(id) {
         const idx = this.data.findIndex(p => p.id == id)
         this.data.splice(idx, 1)
 
         this.write()
     }
 
-    deleteAll() {
+    async deleteAll() {
         this.data = []
 
         this.write()

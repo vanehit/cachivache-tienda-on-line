@@ -1,6 +1,6 @@
 const mongoose =  require('mongoose');
 
-    const productModel = mongoose.model(
+    const ProductModel = mongoose.model(
             'Products',
              new mongoose.Schema({
                 name: String,
@@ -9,4 +9,4 @@ const mongoose =  require('mongoose');
                 precio: Number,
             }));
 
-module.exports = productModel;
+module.exports = ProductModel;

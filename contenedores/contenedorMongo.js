@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
-const productModel = require('../model/model');
 const ObjectId = require('mongoose').Types.ObjectId;
 
 //constructor
 
 class contenedorMongo{
-    constructor{
+
+    constructor(uri, model) {
         this.mongo = mongoose;
-       // const URI = 'mongodb://localhost/products';
-        mongoose.connect.(URI, {
+        this.model = model
+        mongoose.connect(uri, {
             useUnifiedTopology: true,
             useNewUrlParser: true,
         })
@@ -17,24 +17,24 @@ class contenedorMongo{
     }
 
     async save(obj) {
-        const newProduct = new productModel(obj);
+        const newProduct = new this.model(obj);
         await newProduct.save()
 
         return newProduct
     }
 
-    getByID(id){
-        return productModel.find({ id: new ObjectId(id) });
+    async getByID(id){
+        return this.model.find({ id: new ObjectId(id) });
     }
 
-    getAll(id){
-        return productModel.find({});
+    async getAll(id){
+        return this.model.find({});
     }
 
     //update
-    editByID(obj, id) {
+    async editByID(obj, id) {
         console.log('UPDATE')
-        const objUpdated= await productModel.updateOne(
+        const objUpdated= await this.model.updateOne(
             { _id: new ObjectId(id) },
             { $set: obj  }
         )
@@ -43,8 +43,8 @@ class contenedorMongo{
     }
 
    
-    DeleteByID(id){
-        const userDelete = await productModel.deleteOne({ id: new ObjectId(id) })
+    async DeleteByID(id){
+        const userDelete = await this.model.deleteOne({ id: new ObjectId(id) })
 
         return true
     }
