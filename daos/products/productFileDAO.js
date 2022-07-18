@@ -1,9 +1,11 @@
 const contenedorFile = require('../../contenedores/contenedorFile')
 
-class productFileDAO  extends contenedorFile {
-    constructor () {
-        super('DB_products.json')
-    }
+class ProductFileDAO extends contenedorFile {
+
+  constructor() {
+    super('DB_products.json')
+  }
+
 }
 
-module.exports = productFileDAO
+module.exports = ProductFileDAO;

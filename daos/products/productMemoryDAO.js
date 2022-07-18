@@ -1,9 +1,11 @@
-const contenedorMemoria = require('../../contenedores/contenedormemory')
+const contenedorMemory = require('../../contenedores/contenedorMemory')
 
-class productMemoryDAO  extends contenedorMemoria {
-    constructor () {
-        super()
-    }
+class ProductMemoryDAO extends contenedorMemory {
+
+  constructor() {
+    super()
+  }
+
 }
 
-module.exports = productMemoryDAO
+module.exports = ProductMemoryDAO;

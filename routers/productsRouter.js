@@ -1,34 +1,22 @@
-const express = require('express')
-const { Router } = express
-const fs = require( 'fs' );
-
-
-const productsRouter = Router()
+const productsRouter = require( 'express' ).Router();
 
 const FactoryDAO = require( '../daos/index' );
 const DAO = FactoryDAO();
 
-
-function auth(req, res, next) {
-  if('admin' in req.headers) next()
-  else {
-      res.status(400)
-      res.send('No admin')
-  }
-}
-
-//1) Devuelve todos los productos 
+//1) Devuelve todos los productos (disponible para usuarios y admins)
 productsRouter.get( '/', ( req, res ) => {
-  DAO.products.getAll().then( data => res.json( data ) )
+  DAO.product.getAll().then( data => res.json( data ) )
 });
 
+//2) Devuelve un producto segun su id (disponible para usuarios y admins)
 productsRouter.get( '/:id', ( req, res ) => {
-  DAO.products.getById( req.params.id ).then( data => res.json( data ) )
+  DAO.product.getById( req.params.id ).then( data => res.json( data ) )
 });
 
+//3) Recibe y agrega un producto. Devuelve el producto agregado y su ID asignada (disponible para admins)
 productsRouter.post( '/', ( req, res ) => {
   if( req.headers.admin ){
-    DAO.products.save( req.body ).then( data => res.json( data ) )
+    DAO.product.save( req.body ).then( data => res.json( data ) )
   }
   else{
     res.json({
@@ -41,10 +29,9 @@ productsRouter.post( '/', ( req, res ) => {
 //4) Edita un producto segun su id: (disponible para admins)
 productsRouter.put( '/:id', ( req, res ) => {
   if( req.headers.admin ){
-    DAO.products.editById( req.params.id, req.body )
+    DAO.product.editById( req.params.id, req.body )
       .then( data => res.json( data ) )
-  }
-  else{
+  } else{
     res.json({
       error: -1,
       desc: 'Ruta y metodo PUT no autorizado.',
@@ -52,11 +39,10 @@ productsRouter.put( '/:id', ( req, res ) => {
   }
 });
 
-
 //5) Elimina un producto segun su id: (disponible para admins)
 productsRouter.delete( '/:id', ( req, res ) => {
   if( req.headers.admin ){
-    DAO.products.deleteById( req.params.id ).then( data => res.json( data ) )
+    DAO.product.deleteById( req.params.id ).then( data => res.json( data ) )
   }
   else{
     res.json({
@@ -66,10 +52,7 @@ productsRouter.delete( '/:id', ( req, res ) => {
   }
 });
 
-
-
-module.exports = productsRouter
-
+module.exports = productsRouter;
 
 
 

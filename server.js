@@ -4,7 +4,7 @@ const cors = require( 'cors' );
 
 //import routers
 const productsRouter = require('./routers/productsRouter');
-const carritoRouter = require( './routers/carritoRouter' );
+const cartRouter = require( './routers/cartRouter' );
 
 
 
@@ -21,15 +21,14 @@ app.use("/", express.static("frontend" + __dirname + '/public'));
 
 //Routes
 
-app.use( '/api/products', productsRouter );
-app.use( '/api/carrito', carritoRouter );
+app.use( '/api/productos', productsRouter );
+app.use( '/api/carrito',  cartRouter);
 app.get( '/*', (req,res) => {
     res.json({
         error: -2,
         desc: "Ruta no implementada"
     })
 } )
-
 //Server listening
 const server = app.listen( PORT, () => {
     console.log( `Server on PORT: ${ PORT }` );

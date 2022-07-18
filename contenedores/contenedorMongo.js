@@ -1,69 +1,63 @@
 const mongoose = require('mongoose');
 const ObjectId = require('mongoose').Types.ObjectId;
 
-//constructor
+class ContenedorMongo {
 
-class contenedorMongo{
+  constructor(uri, model) {
+    this.model = model;
+    this.mongo = mongoose.connect(uri, {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+    })
+      .then(db => console.log(`DB is connected`))
+      .catch(err => console.log(err));
+  }
 
-    constructor(uri, model) {
-        this.mongo = mongoose;
-        this.model = model
-        mongoose.connect(uri, {
-            useUnifiedTopology: true,
-            useNewUrlParser: true,
-        })
-        .then(db => console.log('DB is connected'))
-        .catch(err => console.log(err));
-    }
+  async save(obj) {
+    const newProduct = new this.model(obj);
+    await newProduct.save();
 
-    async save(obj) {
-        const newProduct = new this.model(obj);
-        await newProduct.save()
+    return newProduct;
+  }
 
-        return newProduct
-    }
+  async getById(id) {
+    return this.model.find({ _id: new ObjectId(id) })
+  }
 
-    async getByID(id){
-        return this.model.find({ id: new ObjectId(id) });
-    }
+  async getAll(id) {
+    return this.model.find({})
+  }
 
-    async getAll(id){
-        return this.model.find({});
-    }
+  async editById(id, obj) {
+    console.log('UPDATE');
+    const objUpdated = await this.model.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: obj }
+    );
 
-    //update
-    async editByID(obj, id) {
-        console.log('UPDATE')
-        const objUpdated= await this.model.updateOne(
-            { _id: new ObjectId(id) },
-            { $set: obj  }
-        )
+    return objUpdated;
+  }
 
-        return objUpdated
-    }
+  async deleteById(id) {
+    const userDelete = await this.model.deleteOne({ _id: new ObjectId(id) });
+    return true;
+  }
 
-   
-    async DeleteByID(id){
-        const userDelete = await this.model.deleteOne({ id: new ObjectId(id) })
+  async addToCart(id, obj){
+    const objUpdated = await this.model.updateOne(
+      { _id: new ObjectId(id) },
+      { $addToSet: {productos : obj} }
+    );
+    return objUpdated;
+  }
 
-        return true
-    }
-    async addToCarrito(id, obj){
-        const objUpdated = await this.model.updateOne(
-          { _id: new ObjectId(id) },
-          { $addToSet: {productos : obj} }
-        );
-        return objUpdated;
-      }
-    
-      async delFromCarrrito( id, idProd ){
-        const objUpdated = await this.model.updateOne(
-          { _id: new ObjectId(id) },
-          { $pull: {productos : { id: Number(idProd) }} }
-        );
-        return objUpdated;
-      }
-   
+  async delFromCart( id, idProd ){
+    const objUpdated = await this.model.updateOne(
+      { _id: new ObjectId(id) },
+      { $pull: {productos : { id: Number(idProd) }} }
+    );
+    return objUpdated;
+  }
 }
 
-module.exports = contenedorMongo
+module.exports = ContenedorMongo;

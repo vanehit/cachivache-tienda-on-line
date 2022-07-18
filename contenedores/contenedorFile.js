@@ -1,87 +1,83 @@
-const fs = require('fs')
+const fs = require( 'fs' );
 
-class contenedorFile {
+class ContenedorFile {
 
-    constructor(filename) {
-        console.log('Init Contenedor')
-        this.filename = filename
-        this.data = []
+  constructor( textJson ){
+    this.textJson = textJson;
+  }
 
-        try {
-            this.read()
-        } catch(e) {
-            console.log('No se encontro el file')
-            console.log('Creando uno nuevo')
-            this.write()
-        }
+  async getAll(){
+    const read = fs.readFileSync( this.textJson, 'utf-8' );
+    const products = JSON.parse( read );
+
+    return products;
+  }
+
+  async getById( id ){
+    const read = fs.readFileSync( this.textJson, 'utf-8' );
+    const products = JSON.parse( read );
+
+    const product = products.find( prod => prod.id === Number(id) );
+
+    if ( product == undefined ){
+      return({ error: 'Producto no encontrado' });
+    } else {
+      return( product );
     }
+  }
 
-    write() {
-        fs.writeFileSync(this.filename, JSON.stringify(this.data))
+  async save( obj ){
+    const read = fs.readFileSync( this.textJson, 'utf-8' );
+    const products = JSON.parse( read );
+
+    const date = new Date();
+    obj.timeStamp = date.toISOString().split('T')[0] + ' ' + date.toLocaleTimeString();
+
+    const productsId = products.map( p => Number(p.id) );
+    obj.id = Math.max( ...productsId ) + 1;
+
+    products.push( obj );
+
+    fs.writeFileSync( this.textJson, JSON.stringify( products, null, '\t' ) );
+    return obj;
+  }
+
+  async editById( id, product ){
+    const date = new Date();
+    product.timeStamp = date.toISOString().split('T')[0] + ' ' + date.toLocaleTimeString();
+    product.id = Number(id);
+
+    const read = fs.readFileSync( this.textJson, 'utf-8' );
+    const products = JSON.parse( read );
+
+    const idx = products.findIndex( p => p.id == Number(id) );
+
+    if( idx === -1 ){
+      return({  error :'El producto que desea editar no existe.' })
+    } else {
+      products.splice( idx, 1, product );
+
+      fs.writeFileSync( this.textJson, JSON.stringify( products, null, '\t' ) );
+      return( product );
     }
-    read() {
-        this.data = JSON.parse(fs.readFileSync(this.filename))
+  }
+
+  async deleteById( id ){
+    const read = fs.readFileSync( this.textJson, 'utf-8' );
+    const products = JSON.parse( read );
+
+    const idx = products.findIndex( p => p.id == Number(id) );
+
+    if( idx === -1 ){
+      return( { error : 'El producto que desea eliminar no existe.' } )
+    } else {
+      products.splice( idx, 1 );
+
+      fs.writeFileSync( this.textJson, JSON.stringify( products, null, '\t' ) );
+      return( { data: `Se elimino el producto con id: ${ id }` } );
     }
-
-    async getAllPromise() { 
-        try { 
-            const allContent = await fs.promises.readFile(this.filename, 'utf-8')
-            const content = JSON.parse(allContent)
-
-            return content; 
-        } catch (error) { 
-            console.log(error)
-            throw error
-        } 
-    } 
-
-    async getLastID() {
-        const l = this.data.length
-        
-        if(l < 1) return 0
-
-        return this.data[this.data.length - 1].id
-    }
-
-    async save(obj) {
-        const id = this.getLastID()
-        this.data.push({
-            ...obj, ...{ id: id + 1 }
-        })
-        this.write()
-    }
-
-    async getByID(id) {
-        return this.data.find(p => p.id == id)
-    }
-
-    async editByID(obj, id) {
-        obj [ 'id' ] = id
-        const idx = this.getAll().findIndex(p => p.id == id)
-        this.data.splice(idx, 1, obj)
-
-        return obj
-    }
-
-    async getAll() {
-        return this.data
-    }
-
-    async deleteById(id) {
-        const idx = this.data.findIndex(p => p.id == id)
-        this.data.splice(idx, 1)
-
-        this.write()
-    }
-
-    async deleteAll() {
-        this.data = []
-
-        this.write()
-    }
+  }
 
 }
 
-
-
-module.exports = contenedorFile
+module.exports = ContenedorFile;
